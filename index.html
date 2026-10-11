@@ -1,0 +1,286 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benford Lab 數字鑑識實驗室</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="main-nav">
+  <a href="#inputSection">01 資料輸入</a>
+  <a href="#suitabilitySection">02 適用性檢查</a>
+  <a href="#analysisSection">03 分布分析</a>
+  <a href="#diagnosisSection">04 診斷報告</a>
+  <a href="#knowledgeSection">05 知識導覽</a>
+  <a href="#procurementSection">06 政府採購專題</a>
+</nav>
+
+  <h1>Benford Lab 數字鑑識實驗室</h1>
+  <p>輸入一組數字，分析是否符合班佛定律。</p>
+
+  <h2 id="inputSection">01 資料輸入</h2>
+
+<div class="upload-area" id="uploadArea">
+
+  <div class="upload-icon">↑</div>
+
+  <h3>拖曳檔案至此處</h3>
+
+  <p>
+    或
+    <label for="dataFile" class="upload-link">
+      點此選擇檔案
+    </label>
+  </p>
+
+  <p class="upload-formats">
+    支援 .CSV / .XLSX / .XLS / .TSV / .TXT
+  </p>
+
+  <input
+    type="file"
+    id="dataFile"
+    accept=".csv,.xlsx,.xls,.tsv,.txt"
+    hidden
+  >
+
+  <p id="fileName"></p>
+
+</div>
+
+<div id="columnSection" style="display: none;">
+
+  <h2>選擇分析欄位</h2>
+
+  <p>請選擇要進行班佛定律分析的數值欄位：</p>
+
+  <select id="columnSelect">
+    <option value="">請選擇欄位</option>
+  </select>
+
+</div>
+
+<div id="previewSection" style="display: none;">
+  <h2>資料預覽</h2>
+  <p>顯示上傳資料的前 5 筆，方便確認內容。</p>
+  <div id="dataPreview"></div>
+</div>
+
+  <textarea id="numbers" rows="10" cols="45"
+    placeholder="請輸入數字，每行一筆，例如：
+123
+245
+389
+1500"></textarea>
+
+  <p>
+    <button onclick="analyze()">開始分析</button>
+    <button type="button" class="clear-btn" onclick="clearNumbers()">清空欄位</button>
+    <div class="example-section">
+  <p>沒有資料嗎？可以先使用範例資料體驗分析。</p>
+  <button type="button" class="example-btn" onclick="loadExampleData()">
+    載入世界人口範例
+  </button>
+  <p class="example-source">
+  資料來源：World Bank（世界銀行）｜2024 年各國及經濟體人口統計
+</p>
+</div>
+    
+  </p>
+
+  <section id="suitabilitySection">
+
+  <h2>02 適用性檢查</h2>
+  <p>確認資料是否適合使用班佛定律進行分析。</p>
+
+  <div class="suitability-grid">
+
+    <div class="suitability-card">
+      <h3>樣本數量</h3>
+      <p id="sampleCheck">尚未檢查</p>
+    </div>
+
+    <div class="suitability-card">
+      <h3>數量級跨度</h3>
+      <p id="magnitudeCheck">尚未檢查</p>
+    </div>
+
+    <div class="suitability-card">
+  <h3>非編碼型資料</h3>
+  <p id="encodingCheck">尚未確認</p>
+
+  <select id="dataTypeSelect">
+    <option value="">請選擇資料類型</option>
+    <option value="natural">自然產生的數值（金額、人口等）</option>
+    <option value="code">人為編碼（電話、身分證號等）</option>
+    <option value="unknown">不確定資料類型</option>
+  </select>
+</div>
+
+    <div class="suitability-card">
+  <h3>非固定範圍</h3>
+  <p id="rangeCheck">尚未確認</p>
+
+  <select id="rangeTypeSelect">
+    <option value="">請選擇資料範圍</option>
+    <option value="unrestricted">沒有明確的上下限</option>
+    <option value="restricted">有固定上下限（例如 0～100 分）</option>
+    <option value="unknown">不確定是否有限制</option>
+  </select>
+</div>
+
+  </div>
+
+</section>
+
+  <h2 id="analysisSection">03 分布分析</h2>
+<p>比較資料的首位數分布與班佛定律的理論比例，觀察各數字是否出現明顯差異。</p>
+ <div id="result">尚未進行分析</div>
+<div id="chart"></div>
+
+<div class="chart-explanation">
+  <h3>如何解讀這張圖表？</h3>
+
+  <p>
+    班佛定律指出，在符合適用條件的自然數據中，
+    首位數為 1 的比例約為 30.1%，
+    而首位數為 9 的比例約為 4.6%。
+  </p>
+
+  <p>
+    比較實際分布與理論分布，可以觀察哪些數字出現較大的差異。
+    但即使分布異常，也不能直接認定資料有造假情形。
+  </p>
+</div>
+
+<section id="diagnosisSection">
+
+  <h2>04 診斷報告</h2>
+
+  <p>
+    根據首位數分布的分析結果，
+    提供初步判讀與後續檢查建議。
+  </p>
+
+  <div class="diagnosis-card">
+
+    <h3>分析診斷結果</h3>
+
+    <div id="diagnosisResult">
+      尚未進行分析，請先輸入資料並執行分析。
+    </div>
+
+  </div>
+
+</section>
+
+<section id="knowledgeSection">
+
+  <h2>05 知識導覽</h2>
+
+  <p>
+    透過常見問題，了解班佛定律的原理、適用情境與分析限制。
+  </p>
+
+  <div class="knowledge-list">
+
+    <details>
+      <summary>什麼是班佛定律？</summary>
+      <p>
+        班佛定律指出，許多自然形成的數據中，
+        首位數字並不是平均分布。
+        數字 1 出現的機率約為 30.1%，
+        數字 9 則約為 4.6%。
+      </p>
+    </details>
+
+    <details>
+      <summary>哪些資料適合使用班佛定律？</summary>
+      <p>
+        通常適合自然產生、樣本數充足、
+        涵蓋多個數量級，且沒有明確固定範圍的數值資料，
+        例如部分財務金額、人口或交易資料。
+      </p>
+    </details>
+
+    <details>
+      <summary>為什麼有些數字會出現異常？</summary>
+      <p>
+        可能與資料蒐集方式、樣本數不足、
+        數值範圍限制或資料本身的特性有關，
+        不一定代表有人刻意修改資料。
+      </p>
+    </details>
+
+    <details>
+      <summary>發現異常後應該怎麼做？</summary>
+      <p>
+        可以先確認資料來源、檢查是否有輸入錯誤，
+        並針對偏離較明顯的數字進一步分析。
+        不應直接將異常結果視為造假證據。
+      </p>
+    </details>
+
+    <details>
+      <summary>班佛定律有哪些實際應用？</summary>
+      <p>
+        班佛定律常被用於財務稽核、會計資料檢查、
+        數據品質分析與異常偵測，
+        協助找出值得進一步調查的資料。
+      </p>
+    </details>
+
+    <details>
+      <summary>使用班佛定律需要注意什麼？</summary>
+      <p>
+        班佛定律並不適用所有數據，
+        例如電話號碼、身分證字號、流水號，
+        或受到固定範圍限制的資料。
+        分析前應先確認資料的適用性。
+      </p>
+    </details>
+
+  </div>
+
+</section>
+
+
+<section id="procurementSection" class="procurement-section">
+  <h2>06 政府採購專題</h2>
+  <p>2025 年 6 月決標金額｜臺灣政府採購初步資料分析</p>
+  <p class="research-source">資料來源：OpenFun 第三方政府採購公告 API。資料為 2025/06/16～06/18 公告中成功擷取且初步符合條件的 202 筆案件，非全臺灣當月完整資料；部分案件因 API 限流未能取得。</p>
+  <div class="procurement-controls">
+    <label for="procurementCategory">採購類型</label>
+    <select id="procurementCategory">
+      <option value="全部">全部採購</option>
+      <option value="工程類">工程類</option>
+      <option value="財物類">財物類</option>
+      <option value="勞務類">勞務類</option>
+    </select>
+  </div>
+  <div class="procurement-metrics">
+    <div><span>初步符合筆數</span><strong id="procurementCount">—</strong></div>
+    <div><span>最低金額</span><strong id="procurementMin">—</strong></div>
+    <div><span>最高金額</span><strong id="procurementMax">—</strong></div>
+  </div>
+  <h3>首位數分布與班佛定律比較</h3>
+  <div class="procurement-chart-wrap"><canvas id="procurementCanvas"></canvas></div>
+  <div id="procurementTable"></div>
+  <p class="research-interpretation" id="procurementInterpretation">正在載入分析…</p>
+  <p class="research-source">目前樣本數及資料完整性不足，首位數分布差異只能作為初步觀察，不能據此推斷異常或舞弊。</p>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+
+<script src="procurement_data.js"></script>
+<script src="script.js"></script>
+<script src="procurement.js"></script>
+
+</body>
+</html>
+

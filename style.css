@@ -1,0 +1,831 @@
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 50px 24px;
+  background: #faf9f6;
+  color: #39433c;
+  font-family: "Microsoft JhengHei", Arial, sans-serif;
+  line-height: 1.8;
+}
+
+h1 {
+  color: #536b57;
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+}
+
+h2 {
+  margin-top: 40px;
+  color: #536b57;
+  font-size: 26px;
+}
+
+p {
+  color: #6f7c70;
+}
+
+textarea {
+  width: 100%;
+  max-width: 720px;
+  padding: 18px;
+  background: #172338;
+  border: 1px solid #34465f;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  resize: vertical;
+}
+
+textarea:focus {
+  outline: 2px solid #3b82f6;
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 13px 26px;
+  border-radius: 9px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+#result {
+  max-width: 900px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #172338;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 14px;
+  text-align: center;
+  border: 1px solid #34465f;
+}
+
+th {
+  background: #243754;
+  color: #93c5fd;
+}
+
+tr:hover {
+  background: #263a58;
+}
+
+#chart {
+  max-width: 900px;
+  margin-top: 30px;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 20px;
+  color: #cbd5e1;
+}
+
+.chart-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 16px;
+}
+
+.chart-digit {
+  width: 25px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #e2e8f0;
+}
+
+.chart-bars {
+  flex: 1;
+  min-width: 0;
+}
+
+.bar {
+  min-height: 25px;
+  margin: 3px 0;
+  border-radius: 5px;
+  padding: 3px 8px;
+  color: white;
+  font-size: 12px;
+  white-space: nowrap;
+  transition: width 0.5s ease;
+}
+
+.actual {
+  background: #3b82f6;
+}
+
+.expected {
+  background: #f97316;
+}
+
+/* 拖曳上傳區域 */
+
+.upload-area {
+  max-width: 720px;
+  min-height: 260px;
+  padding: 35px 20px;
+  border: 2px dashed #638bff;
+  border-radius: 18px;
+  background: #172338;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.upload-area:hover {
+  background: #1e3050;
+  border-color: #93b4ff;
+}
+
+.upload-icon {
+  font-size: 65px;
+  color: #638bff;
+  line-height: 1.2;
+}
+
+.upload-area h3 {
+  font-size: 22px;
+  color: #e5edf8;
+  margin: 15px 0 5px;
+}
+
+.upload-link {
+  color: #7fa7ff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.upload-formats {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+#fileName {
+  color: #93c5fd;
+  font-size: 14px;
+}
+
+/* 拖曳檔案時的視覺效果 */
+
+.upload-area.dragover {
+  background: #263f68;
+  border-color: #93c5fd;
+  transform: scale(1.01);
+}
+
+/* 分析欄位選擇 */
+
+#columnSection {
+  max-width: 720px;
+  margin-top: 25px;
+  padding: 20px;
+  background: #172338;
+  border: 1px solid #34465f;
+  border-radius: 12px;
+}
+
+#columnSelect {
+  width: 100%;
+  padding: 12px;
+  background: #0b1220;
+  color: #e5edf8;
+  border: 1px solid #638bff;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+/* 資料預覽區域 */
+
+#previewSection {
+  max-width: 900px;
+  margin-top: 25px;
+  padding: 20px;
+  background: #172338;
+  border: 1px solid #34465f;
+  border-radius: 12px;
+}
+
+#dataPreview {
+  overflow-x: auto;
+  margin-top: 15px;
+}
+
+#dataPreview table {
+  min-width: 100%;
+}
+
+/* 適用性檢查區域 */
+
+#suitabilitySection {
+  max-width: 100%;
+  margin: 50px auto;
+  padding: 35px;
+  background: #f8f7f4;
+  border: 1px solid #e8e5df;
+  border-radius: 20px;
+  color: #39433c;
+}
+
+#suitabilitySection h2 {
+  margin-top: 0;
+  color: #39433c;
+  text-align: center;
+  font-size: 26px;
+}
+
+#suitabilitySection > p {
+  text-align: center;
+  color: #858b82;
+  margin-bottom: 30px;
+}
+
+/* 四張卡片排列 */
+
+.suitability-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+}
+
+/* 單張卡片 */
+
+.suitability-card {
+  background: #ffffff;
+  border: 1px solid #e8e5df;
+  border-radius: 14px;
+  padding: 25px 15px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(50, 60, 50, 0.04);
+}
+
+.suitability-card h3 {
+  color: #48594c;
+  font-size: 17px;
+  margin: 0 0 15px;
+}
+
+.suitability-card p {
+  color: #879287;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* 手機與小螢幕 */
+
+@media (max-width: 800px) {
+  .suitability-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .suitability-grid {
+    grid-template-columns: 1fr;
+  }
+
+  #suitabilitySection {
+    padding: 20px;
+  }
+}
+
+/* 非編碼型資料選擇 */
+
+#dataTypeSelect {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid #d9ded5;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #48594c;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* 非固定範圍選擇 */
+
+#rangeTypeSelect {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid #d9ded5;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #48594c;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+/* 03 分布分析：圖表解讀說明 */
+
+.chart-explanation {
+  margin-top: 24px;
+  padding: 24px 28px;
+  background-color: #f5f6f0;
+  border-left: 4px solid #8da58e;
+  border-radius: 10px;
+}
+
+.chart-explanation h3 {
+  margin-top: 0;
+  margin-bottom: 14px;
+  color: #536b57;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.chart-explanation p {
+  color: #59665b;
+  font-size: 15px;
+  line-height: 1.9;
+  margin-bottom: 10px;
+}
+
+.chart-explanation p:last-child {
+  margin-bottom: 0;
+}
+
+/* 04 診斷報告 */
+
+#diagnosisSection {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+.diagnosis-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e7df;
+  border-radius: 14px;
+  padding: 28px;
+  margin-top: 20px;
+  box-shadow: 0 4px 16px rgba(70, 90, 70, 0.05);
+}
+
+.diagnosis-card h3 {
+  color: #536b57;
+  font-size: 19px;
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+#diagnosisResult {
+  color: #59665b;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+/* 05 知識導覽 */
+
+#knowledgeSection {
+  margin-top: 40px;
+  margin-bottom: 50px;
+}
+
+.knowledge-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.knowledge-list details {
+  background-color: #ffffff;
+  border: 1px solid #e2e7df;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.knowledge-list details[open] {
+  border-color: #a5b9a5;
+}
+
+.knowledge-list summary {
+  padding: 20px 24px;
+  color: #536b57;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.knowledge-list summary:hover {
+  background-color: #f5f6f0;
+}
+
+.knowledge-list details p {
+  margin: 0;
+  padding: 0 24px 22px;
+  color: #59665b;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+/* 01 資料輸入：文青風格 */
+
+/* 拖曳上傳區域 */
+.upload-area {
+  background: #f5f6f0;
+  border: 2px dashed #a5b9a5;
+  border-radius: 16px;
+}
+
+.upload-area:hover {
+  background: #edf1e9;
+  border-color: #78947b;
+}
+
+.upload-area.dragover {
+  background: #e7eee4;
+  border-color: #78947b;
+}
+
+/* 上傳圖示 */
+.upload-icon {
+  color: #78947b;
+}
+
+/* 上傳區文字 */
+.upload-area h3 {
+  color: #48594c;
+}
+
+.upload-link {
+  color: #65866a;
+  font-weight: 600;
+}
+
+.upload-formats {
+  color: #879287;
+}
+
+#fileName {
+  color: #65866a;
+}
+
+/* 手動輸入框 */
+textarea {
+  background: #ffffff;
+  color: #39433c;
+  border: 1px solid #d9ded5;
+  border-radius: 12px;
+}
+
+textarea::placeholder {
+  color: #9aa59b;
+}
+
+textarea:focus {
+  outline: 2px solid #a5b9a5;
+  border-color: #78947b;
+}
+
+/* 開始分析按鈕 */
+button {
+  background: #78947b;
+  color: #ffffff;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #5f7d63;
+}
+
+/* 資料欄位選擇 */
+
+#columnSection {
+  background: #ffffff;
+  border: 1px solid #e2e7df;
+  border-radius: 14px;
+}
+
+#columnSelect {
+  background: #ffffff;
+  color: #39433c;
+  border: 1px solid #d9ded5;
+  border-radius: 8px;
+}
+
+#columnSelect:focus {
+  outline: 2px solid #a5b9a5;
+}
+
+/* 資料預覽 */
+
+#previewSection {
+  background: #ffffff;
+  border: 1px solid #e2e7df;
+  border-radius: 14px;
+}
+
+/* 分析結果表格 */
+
+table {
+  background: #ffffff;
+  color: #39433c;
+  border-radius: 12px;
+}
+
+th, td {
+  border: 1px solid #e2e7df;
+}
+
+th {
+  background: #edf1e9;
+  color: #536b57;
+}
+
+td {
+  background: #ffffff;
+  color: #59665b;
+}
+
+tr:hover td {
+  background: #f5f6f0;
+}
+
+/* 03 分布分析：統一表格與圖表寬度 */
+
+#result,
+#chart {
+  width: 100%;
+  max-width: 1000px;
+}
+
+#chart {
+  margin-top: 35px;
+  margin-bottom: 30px;
+}
+
+#benfordCanvas {
+  width: 100% !important;
+  height: auto !important;
+}
+
+/* 01 資料輸入：統一區塊寬度 */
+
+.upload-area,
+textarea,
+#columnSection,
+#previewSection {
+  width: 100%;
+  max-width: 1000px;
+}
+
+/* 手動輸入框 */
+textarea {
+  display: block;
+  min-height: 180px;
+  margin-top: 16px;
+  margin-bottom: 20px;
+}
+
+/* 上傳區 */
+.upload-area {
+  min-height: 260px;
+}
+
+/* 小螢幕適應 */
+@media (max-width: 600px) {
+  .upload-area {
+    min-height: 220px;
+    padding: 28px 16px;
+  }
+
+  textarea {
+    min-height: 150px;
+  }
+}
+
+/* 統一各功能區塊的上下間距 */
+
+#suitabilitySection,
+#diagnosisSection,
+#knowledgeSection {
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+/* 主要標題與說明文字 */
+h2 {
+  margin-top: 50px;
+  margin-bottom: 16px;
+}
+
+h2 + p {
+  margin-top: 0;
+  margin-bottom: 28px;
+}
+
+/* 避免適用性檢查標題出現過大間距 */
+#suitabilitySection h2 {
+  margin-top: 0;
+}
+
+/* 網站主標題 */
+
+h1 {
+  font-size: 42px;
+  font-weight: 700;
+  color: #536b57;
+  letter-spacing: 2px;
+  line-height: 1.4;
+  margin-top: 20px;
+  margin-bottom: 16px;
+}
+
+/* 主標題下方的說明文字 */
+
+h1 + p {
+  font-size: 16px;
+  color: #879287;
+  letter-spacing: 1px;
+  margin-bottom: 65px;
+}
+
+/* 手機版標題 */
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 30px;
+    letter-spacing: 1px;
+  }
+
+  h1 + p {
+    font-size: 14px;
+    margin-bottom: 40px;
+  }
+}
+
+/* 網站頂部導覽列 */
+
+.main-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto 45px;
+
+  padding: 16px 20px;
+
+  background: #ffffff;
+  border: 1px solid #e2e7df;
+  border-radius: 16px;
+
+  box-shadow: 0 4px 16px rgba(70, 90, 70, 0.05);
+  position: sticky;
+top: 12px;
+z-index: 100;
+}
+
+/* 導覽連結 */
+
+.main-nav a {
+  color: #536b57;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+
+  padding: 10px 15px;
+  border-radius: 9px;
+
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* 滑鼠移到連結上的效果 */
+
+.main-nav a:hover {
+  background: #edf1e9;
+  color: #3f5943;
+}
+
+/* 點擊導覽列時平滑捲動 */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* 手機版導覽列 */
+
+@media (max-width: 600px) {
+  .main-nav {
+    gap: 6px;
+    padding: 12px;
+    
+  }
+
+  .main-nav a {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}
+
+/* 避免導覽列遮住跳轉後的標題 */
+
+#inputSection,
+#suitabilitySection,
+#analysisSection,
+#diagnosisSection,
+#knowledgeSection {
+  scroll-margin-top: 120px;
+}
+
+/* 清空欄位按鈕 */
+
+.clear-btn {
+  background: #ffffff;
+  color: #78947b;
+  border: 2px solid #a5b9a5;
+  margin-left: 12px;
+}
+
+.clear-btn:hover {
+  background: #edf1e9;
+  color: #536b57;
+  border-color: #78947b;
+}
+
+/* 範例資料區塊 */
+.example-section {
+  margin-top: 24px;
+  padding: 20px 24px;
+  background: #f5f3ed;
+  border: 1px solid #e5e2d8;
+  border-radius: 12px;
+}
+
+.example-section p {
+  margin: 0 0 14px;
+  color: #68766a;
+  font-size: 15px;
+}
+
+/* 載入範例資料按鈕 */
+.example-btn {
+  background: #819982;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.example-btn:hover {
+  background: #667f69;
+}
+
+.example-section .example-source {
+  margin-top: 12px;
+  margin-bottom: 0;
+  font-size: 10px;
+  color: #8a9488;
+}
+
+/* 06 政府採購專題 */
+#procurementSection { scroll-margin-top: 120px; }
+.procurement-section { margin: 60px 0; padding: 32px; background: #fff; border: 1px solid #e2e7df; border-radius: 20px; box-shadow: 0 4px 16px rgba(70,90,70,.04); }
+.procurement-section h2 { margin-top: 4px; }
+.procurement-eyebrow { color:#78947b; font-size:12px; letter-spacing:2px; font-weight:700; }
+.research-notice { padding:16px 20px; border-left:4px solid #b3a484; background:#f7f5ef; border-radius:8px; color:#59665b; font-size:14px; }
+.procurement-controls { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin:24px 0; }
+.procurement-controls label { font-weight:600; color:#536b57; }
+.procurement-controls select { min-width:190px; padding:11px 14px; border:1px solid #cbd7c9; border-radius:10px; background:white; color:#39433c; font-size:15px; }
+.procurement-metrics { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:24px 0 30px; }
+.procurement-metrics>div { background:#f5f6f0; border-radius:12px; padding:17px 12px; }
+.procurement-metrics span { display:block; color:#7c897e; font-size:12px; }
+.procurement-metrics strong { display:block; color:#536b57; font-size:20px; overflow-wrap:anywhere; }
+.procurement-section h3 { color:#536b57; }
+.procurement-chart-wrap { position:relative; width:100%; min-height:360px; margin:20px 0 28px; }
+#procurementCanvas { max-width:100%; }
+#procurementTable { overflow-x:auto; }
+#procurementTable table { width:100%; }
+.research-interpretation { margin-top:22px; color:#59665b; }
+.research-source { font-size:12px; color:#889489; }
+@media(max-width:700px) { .procurement-section{padding:18px;} .procurement-metrics{grid-template-columns:repeat(2,minmax(0,1fr));} .procurement-metrics strong{font-size:17px;} }
