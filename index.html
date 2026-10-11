@@ -247,9 +247,17 @@
 
 <section id="procurementSection" class="procurement-section">
   <h2>06 政府採購專題</h2>
-  <p>2025 年 6 月決標金額｜臺灣政府採購初步資料分析</p>
-  <p class="research-source">資料來源：OpenFun 第三方政府採購公告 API。資料為 2025/06/16～06/18 公告中成功擷取且初步符合條件的 202 筆案件，非全臺灣當月完整資料；部分案件因 API 限流未能取得。</p>
+  <p>班佛定律應用於政府採購決標金額分析｜以數位發展部 111～114 年（2022～2025）為例</p>
+  <p class="research-source">資料來源：<a href="https://data.gov.tw/dataset/161985" target="_blank" rel="noopener noreferrer">政府資料開放平臺「數位發展部歷年採購案件」</a>（111、112、113、114 年 CSV）。共 360 筆公開紀錄，其中 1 筆金額為 0，不納入有效數字分析；其餘 359 筆保留原始案件口徑，未排除契約變更或後續擴充。這是單一部會公開資料的探索性分析，不代表全國採購。</p>
   <div class="procurement-controls">
+    <label for="procurementYear">研究年度</label>
+    <select id="procurementYear">
+      <option value="全部">111～114 年（合併）</option>
+      <option value="111">111 年（2022）</option>
+      <option value="112">112 年（2023）</option>
+      <option value="113">113 年（2024）</option>
+      <option value="114">114 年（2025）</option>
+    </select>
     <label for="procurementCategory">採購類型</label>
     <select id="procurementCategory">
       <option value="全部">全部採購</option>
@@ -257,18 +265,22 @@
       <option value="財物類">財物類</option>
       <option value="勞務類">勞務類</option>
     </select>
+    <label for="procurementDigitMode">分析位數</label>
+    <select id="procurementDigitMode"><option value="first">第一位數（1～9）</option><option value="second">第二位數（0～9）</option></select>
   </div>
-  <div class="digit-mode-control"><label for="procurementDigitMode">分析位數</label><select id="procurementDigitMode"><option value="first">第一位數（1～9）</option><option value="second">第二位數（0～9）</option></select></div>
   <div class="procurement-metrics">
-    <div><span>初步符合筆數</span><strong id="procurementCount">—</strong></div>
+    <div><span>有效分析筆數</span><strong id="procurementCount">—</strong></div>
     <div><span>最低金額</span><strong id="procurementMin">—</strong></div>
     <div><span>最高金額</span><strong id="procurementMax">—</strong></div>
+    <div><span>卡方檢定 p 值</span><strong id="procurementPValue">—</strong></div>
   </div>
   <h3 id="procurementChartTitle">第一位數分布與班佛定律比較</h3>
   <div class="procurement-chart-wrap"><canvas id="procurementCanvas"></canvas></div>
   <div id="procurementTable"></div>
-  <p class="research-interpretation" id="procurementInterpretation">正在載入分析…</p>
-  <p class="research-source">目前樣本數及資料完整性不足，數字分布差異只能作為初步觀察，不能據此推斷異常或舞弊。</p>
+  <p class="research-interpretation" id="procurementInterpretation" aria-live="polite">正在載入分析…</p>
+  <h3>各年度資料概況</h3>
+  <div id="procurementYearSummary"></div>
+  <p class="research-source">說明：111 年為數發部成立年度，年度資料量不宜直接解讀為採購活動增減；部分案件涉及契約變更、擴充等情形。卡方檢定的理論期望筆數過小時不宜依 p 值作強結論。偏離班佛定律不能作為舞弊證據。</p>
 </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
