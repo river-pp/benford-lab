@@ -1,3 +1,18 @@
+// 第二位數理論比例：sum_{k=1}^{9} log10(1 + 1/(10k+d))
+function benfordProbability(d, mode) {
+  if (mode === "first") return Math.log10(1 + 1 / d);
+  let p = 0;
+  for (let k = 1; k <= 9; k++) p += Math.log10(1 + 1 / (10 * k + d));
+  return p;
+}
+function significantDigit(value, mode) {
+  if (!Number.isFinite(value) || value === 0) return null;
+  const significant = Math.abs(value).toString().replace(/e[+-]?\d+$/i, "").replace(".", "").replace(/^0+/, "");
+  if (mode === "second" && significant.length < 2) return null;
+  const digits = Math.abs(value).toExponential(14).split("e")[0].replace(".", "");
+  return Number(digits[mode === "first" ? 0 : 1]);
+}
+
 
 function analyze() {
 
@@ -22,34 +37,17 @@ function analyze() {
 
   }
 
-  // 3. 建立數字 1～9 的計數器
+  const mode = document.getElementById("digitMode").value;
+  const digitLabel = mode === "first" ? "第一位數" : "第二位數";
+  const digits = mode === "first" ? [1,2,3,4,5,6,7,8,9] : [0,1,2,3,4,5,6,7,8,9];
   const counts = Array(10).fill(0);
   let total = 0;
-
-  // 4. 逐筆分析數字
   values.forEach(value => {
+    if (value === null || value === undefined || String(value).trim() === "") return;
     const num = Number(value);
-
-    // 排除空白、非數字、0
-  if (
-  value === null ||
-  value === undefined ||
-  String(value).trim() === "" ||
-  !Number.isFinite(num) ||
-  num === 0
-  ) return;
-
-    // 取得第一個有效數字
-    const firstDigit = Number(
-      Math.abs(num)
-        .toExponential()
-        .charAt(0)
-    );
-
-    if (firstDigit >= 1 && firstDigit <= 9) {
-      counts[firstDigit]++;
-      total++;
-    }
+    if (!Number.isFinite(num) || num === 0) return;
+    const digit = significantDigit(num, mode);
+    if (digit !== null && digits.includes(digit)) { counts[digit]++; total++; }
   });
 
   // 5. 顯示分析結果
@@ -131,13 +129,13 @@ if (magnitudeCount >= 3) {
 }
 
   html += "<table border='1' cellpadding='10'>";
-  html += "<tr><th>首位數</th><th>次數</th><th>實際比例</th><th>班佛理論比例</th></tr>";
+  html += `<tr><th>${digitLabel}</th><th>次數</th><th>實際比例</th><th>班佛理論比例</th></tr>`;
 
-  for (let digit = 1; digit <= 9; digit++) {
+  for (const digit of digits) {
     const actual = counts[digit] / total * 100;
 
     const expected =
-      Math.log10(1 + 1 / digit) * 100;
+      benfordProbability(digit, mode) * 100;
 
     html += `
       <tr>
@@ -161,8 +159,8 @@ const actualData = [];
 const expectedData = [];
 const upperData = [];
 
-for (let digit = 1; digit <= 9; digit++) {
-  const p = Math.log10(1 + 1 / digit);
+for (const digit of digits) {
+  const p = benfordProbability(digit, mode);
   const actual = counts[digit] / total;
 
   // 95% 信賴區間上限（常態近似）
@@ -182,10 +180,10 @@ const diagnosisResult = document.getElementById("diagnosisResult");
 
 const abnormalDigits = [];
 
-for (let digit = 1; digit <= 9; digit++) {
+for (const digit of digits) {
 
   const actual = counts[digit] / total;
-  const expected = Math.log10(1 + 1 / digit);
+  const expected = benfordProbability(digit, mode);
 
   // 計算理論比例的 95% 信賴區間
   const margin = 1.96 * Math.sqrt(
@@ -202,16 +200,16 @@ for (let digit = 1; digit <= 9; digit++) {
 }
 
 // 產生診斷報告
-let diagnosisHTML = `<p><strong>有效資料：</strong>${total} 筆</p>`;
+let diagnosisHTML = `<p><strong>分析模式：</strong>${digitLabel}</p><p><strong>有效資料：</strong>${total} 筆</p>`;
 
 if (abnormalDigits.length === 0) {
 
   diagnosisHTML += `
     <p style="color:#5b9873;">
-      ✓ 各首位數的實際比例均落在個別的 95% 信賴區間內。
+      ✓ 各${digitLabel}的實際比例均落在個別的 95% 信賴區間內。
     </p>
     <p>
-      目前沒有發現明顯偏離的首位數，
+      目前沒有發現明顯偏離的${digitLabel}，
       但仍需確認資料是否符合班佛定律的適用條件。
     </p>
   `;
@@ -220,7 +218,7 @@ if (abnormalDigits.length === 0) {
 
   diagnosisHTML += `
     <p style="color:#c58b48;">
-      ⚠ 發現 ${abnormalDigits.length} 個值得進一步觀察的首位數。
+      ⚠ 發現 ${abnormalDigits.length} 個值得進一步觀察的${digitLabel}。
     </p>
 
     <p>
@@ -253,7 +251,7 @@ if (window.benfordChart) {
 
 // 建立圖表容器
 document.getElementById("chart").innerHTML = `
-  <h2>第一定律（首位數分布）</h2>
+  <h2>${mode === "first" ? "第一位數定律（1～9）" : "第二位數定律（0～9）"}</h2>
   <canvas id="benfordCanvas"></canvas>
 `;
 
@@ -665,3 +663,5 @@ document.getElementById("previewSection").style.display = "none";
     alert("載入失敗：" + error.message);
   }
 }
+// 切換分析位數時重新分析已輸入資料
+document.getElementById("digitMode").addEventListener("change", () => analyze());

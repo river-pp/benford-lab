@@ -137,18 +137,15 @@
 </section>
 
   <h2 id="analysisSection">03 分布分析</h2>
-<p>比較資料的首位數分布與班佛定律的理論比例，觀察各數字是否出現明顯差異。</p>
+<div class="digit-mode-control"><label for="digitMode">分析位數</label><select id="digitMode"><option value="first">第一位數（1～9）</option><option value="second">第二位數（0～9）</option></select></div>
+<p>比較資料的第一位數或第二位數分布與班佛定律的理論比例，觀察各數字是否出現差異。</p>
  <div id="result">尚未進行分析</div>
 <div id="chart"></div>
 
 <div class="chart-explanation">
   <h3>如何解讀這張圖表？</h3>
 
-  <p>
-    班佛定律指出，在符合適用條件的自然數據中，
-    首位數為 1 的比例約為 30.1%，
-    而首位數為 9 的比例約為 4.6%。
-  </p>
+  <p id="digitExplanation">班佛第一位數定律中，1 的理論比例約為 30.1%，9 約為 4.6%；第二位數定律則分析 0～9，各數字的理論比例約介於 8.5%～12.0%。</p>
 
   <p>
     比較實際分布與理論分布，可以觀察哪些數字出現較大的差異。
@@ -161,7 +158,7 @@
   <h2>04 診斷報告</h2>
 
   <p>
-    根據首位數分布的分析結果，
+    根據所選位數的分布分析結果，
     提供初步判讀與後續檢查建議。
   </p>
 
@@ -261,16 +258,17 @@
       <option value="勞務類">勞務類</option>
     </select>
   </div>
+  <div class="digit-mode-control"><label for="procurementDigitMode">分析位數</label><select id="procurementDigitMode"><option value="first">第一位數（1～9）</option><option value="second">第二位數（0～9）</option></select></div>
   <div class="procurement-metrics">
     <div><span>初步符合筆數</span><strong id="procurementCount">—</strong></div>
     <div><span>最低金額</span><strong id="procurementMin">—</strong></div>
     <div><span>最高金額</span><strong id="procurementMax">—</strong></div>
   </div>
-  <h3>首位數分布與班佛定律比較</h3>
+  <h3 id="procurementChartTitle">第一位數分布與班佛定律比較</h3>
   <div class="procurement-chart-wrap"><canvas id="procurementCanvas"></canvas></div>
   <div id="procurementTable"></div>
   <p class="research-interpretation" id="procurementInterpretation">正在載入分析…</p>
-  <p class="research-source">目前樣本數及資料完整性不足，首位數分布差異只能作為初步觀察，不能據此推斷異常或舞弊。</p>
+  <p class="research-source">目前樣本數及資料完整性不足，數字分布差異只能作為初步觀察，不能據此推斷異常或舞弊。</p>
 </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
