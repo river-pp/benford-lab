@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Benford Lab 數字鑑識實驗室</title>
-  <link rel="stylesheet" href="style.css?v=20261011">
+  <link rel="stylesheet" href="style.css?v=20261011bb">
 </head>
 <body>
 
@@ -276,6 +276,12 @@
   </div>
   <h3 id="procurementChartTitle">第一位數分布與班佛定律比較</h3>
   <div class="procurement-chart-wrap"><canvas id="procurementCanvas"></canvas></div>
+  <div class="procurement-verdict" id="procurementVerdict" data-status="pending" role="status" aria-live="polite">
+    <div class="procurement-verdict-label">班佛定律檢定結果</div>
+    <strong id="procurementVerdictTitle">正在分析…</strong>
+    <p id="procurementVerdictDetail">依據卡方適合度檢定與樣本條件，提供初步判讀。</p>
+    <small id="procurementVerdictCaution">提醒：統計差異不代表採購案件有舞弊。</small>
+  </div>
   <div id="procurementTable"></div>
   <p class="research-interpretation" id="procurementInterpretation" aria-live="polite">正在載入分析…</p>
   <h3>各年度資料概況</h3>
@@ -289,7 +295,7 @@
 
 <script src="script.js?v=20261011"></script>
 <script src="procurement_data.js?v=20261011"></script>
-<script src="procurement.js?v=20261011"></script>
+<script src="procurement.js?v=20261011bb"></script>
 
 </body>
 </html>

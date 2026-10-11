@@ -834,3 +834,57 @@ html {
 .digit-mode-control { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:18px 0; }
 .digit-mode-control label { font-weight:700; color:#59665b; }
 .digit-mode-control select { border:1px solid #b5c6ae; border-radius:9px; padding:10px 14px; background:#f9faf5; color:#3f5546; font:inherit; max-width:100%; }
+
+/* 06 政府採購：圖表下方的清楚、置中判讀卡 */
+.procurement-verdict {
+  margin: 10px 0 32px;
+  padding: 26px 30px;
+  border: 1px solid #d7e1d5;
+  border-radius: 16px;
+  background: #f6f8f3;
+  text-align: center;
+}
+.procurement-verdict-label {
+  display: block;
+  color: #647567;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  margin-bottom: 10px;
+}
+.procurement-verdict strong {
+  display: block;
+  width: 100%;
+  font-size: clamp(23px, 3vw, 32px);
+  line-height: 1.45;
+  font-weight: 800;
+  color: #3d664c;
+  text-align: center;
+}
+.procurement-verdict p {
+  margin: 13px auto 8px;
+  max-width: 800px;
+  color: #48594c;
+  font-size: 15px;
+  line-height: 1.9;
+}
+.procurement-verdict small {
+  display: block;
+  margin-top: 8px;
+  color: #79877b;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.procurement-verdict[data-status="deviation"] {
+  border-color: #eadfce;
+  background: #fbf7f1;
+}
+.procurement-verdict[data-status="deviation"] strong { color: #96633b; }
+.procurement-verdict[data-status="insufficient"] {
+  border-color: #dfe3e5;
+  background: #f5f6f7;
+}
+.procurement-verdict[data-status="insufficient"] strong { color: #626e75; }
+@media (max-width:600px) {
+  .procurement-verdict { padding: 22px 16px; }
+}
