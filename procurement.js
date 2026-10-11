@@ -51,6 +51,31 @@
     document.getElementById("procurementMin").textContent=n?"NT$ "+fmt.format(Math.min(...values)):"—";
     document.getElementById("procurementMax").textContent=n?"NT$ "+fmt.format(Math.max(...values)):"—";
     document.getElementById("procurementPValue").textContent=p===null?"—":(p<0.0001?"< 0.0001":p.toFixed(4));
+    // 結果卡：先確認檢定條件，再解讀 p 值；不把「未顯著」誤稱為「高度符合」。
+    const verdict=document.getElementById("procurementVerdict");
+    const verdictTitle=document.getElementById("procurementVerdictTitle");
+    const verdictDetail=document.getElementById("procurementVerdictDetail");
+    const verdictCaution=document.getElementById("procurementVerdictCaution");
+    if (verdict && verdictTitle && verdictDetail && verdictCaution) {
+      let status, title, detail;
+      if (!n) {
+        status="insufficient"; title="沒有可分析的資料";
+        detail="目前篩選條件下沒有有效正數金額，無法進行班佛定律檢定。";
+      } else if (smallExpected || n<30) {
+        status="insufficient"; title="檢定條件不足，僅供參考";
+        detail="本組有 "+n+" 筆有效金額，部分數字的理論期望筆數小於 5，傳統卡方檢定的 p 值可能不可靠，不宜據此判定符合或偏離。";
+      } else if (p<0.05) {
+        status="deviation"; title="與班佛定律有顯著偏離";
+        detail="以 5% 顯著水準進行卡方適合度檢定，p 值 "+(p<0.0001?"小於 0.0001":"為 "+p.toFixed(4))+"，實際"+label+"分布與班佛理論分布有統計上的顯著差異。";
+      } else {
+        status="not-significant"; title="未發現顯著偏離";
+        detail="以 5% 顯著水準進行卡方適合度檢定，p 值為 "+p.toFixed(4)+"，目前沒有足夠證據認定實際"+label+"分布偏離班佛理論；不代表已證明完全符合。";
+      }
+      verdict.dataset.status=status;
+      verdictTitle.textContent=title;
+      verdictDetail.textContent=detail;
+      verdictCaution.textContent="僅供教學與探索性分析；分布偏離不代表採購有舞弊，未顯著偏離也不代表採購一定正常。";
+    }
     document.getElementById("procurementChartTitle").textContent=label+"分布與班佛定律比較";
     document.getElementById("procurementTable").innerHTML='<table><thead><tr><th>'+label+'</th><th>筆數</th><th>實際比例</th><th>理論比例</th><th>差距（百分點）</th></tr></thead><tbody>'+digits.map((d,i)=>'<tr><td>'+d+'</td><td>'+counts[i]+'</td><td>'+(actual[i]*100).toFixed(2)+'%</td><td>'+(expected[i]*100).toFixed(2)+'%</td><td>'+((actual[i]-expected[i])*100).toFixed(2)+'</td></tr>').join('')+'</tbody></table>';
     const scope=year==="全部"?"四年合併":year+" 年";
